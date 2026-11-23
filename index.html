@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>إدارة الرفيق — لوحة تحكم المهندس</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; border-style: solid; border-width: 0; border-color: #1e293b; }
+    html, body { height: 100%; width: 100%; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Tahoma, Arial, sans-serif; background: #020617; color: #f1f5f9; overflow-x: hidden; }
+    button, input, select, textarea { font-family: inherit; color: inherit; background: transparent; }
+    button { cursor: pointer; }
+    svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+    .hidden { display: none !important; }
+    .flex { display: flex; }
+    .grid { display: grid; }
+    .flex-col { flex-direction: column; }
+    .flex-1 { flex: 1 1 0%; }
+    .shrink-0 { flex-shrink: 0; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .justify-center { justify-content: center; }
+    .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (min-width: 768px) { .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    .gap-2 { gap: 0.5rem; } .gap-3 { gap: 0.75rem; } .gap-4 { gap: 1rem; }
+    .space-y-2 > * + * { margin-top: 0.5rem; }
+    .space-y-3 > * + * { margin-top: 0.75rem; }
+    .space-y-4 > * + * { margin-top: 1rem; }
+    .p-3 { padding: 0.75rem; } .p-4 { padding: 1rem; } .p-5 { padding: 1.25rem; } .p-6 { padding: 1.5rem; }
+    .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; } .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; } .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; } .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; } .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+    .w-full { width: 100%; } .h-full { height: 100%; } .min-w-0 { min-width: 0; }
+    .max-w-md { max-width: 28rem; } .max-w-5xl { max-width: 64rem; } .mx-auto { margin-left: auto; margin-right: auto; }
+    .mt-1 { margin-top: 0.25rem; } .mt-2 { margin-top: 0.5rem; } .mt-4 { margin-top: 1rem; } .mb-3 { margin-bottom: 0.75rem; } .mb-4 { margin-bottom: 1rem; }
+    .rounded-xl { border-radius: 0.75rem; } .rounded-2xl { border-radius: 1rem; } .rounded-3xl { border-radius: 1.5rem; } .rounded-full { border-radius: 9999px; }
+    .border { border-width: 1px; } .border-b { border-bottom-width: 1px; } .border-t { border-top-width: 1px; }
+    .border-slate-700 { border-color: #334155; } .border-slate-800 { border-color: #1e293b; }
+    .border-indigo-500\/30 { border-color: rgba(99,102,241,0.3); } .border-emerald-500\/30 { border-color: rgba(16,185,129,0.3); }
+    .border-amber-500\/30 { border-color: rgba(245,158,11,0.3); } .border-rose-500\/30 { border-color: rgba(244,63,94,0.3); }
+    .bg-slate-950 { background-color: #020617; } .bg-slate-900 { background-color: #0f172a; } .bg-slate-800 { background-color: #1e293b; }
+    .bg-indigo-600 { background-color: #4f46e5; } .bg-indigo-600\/20 { background-color: rgba(79,70,229,0.2); }
+    .bg-emerald-600 { background-color: #059669; } .bg-emerald-500\/15 { background-color: rgba(16,185,129,0.15); }
+    .bg-amber-500 { background-color: #f59e0b; } .bg-amber-500\/15 { background-color: rgba(245,158,11,0.15); }
+    .bg-rose-600 { background-color: #e11d48; } .bg-rose-500\/15 { background-color: rgba(244,63,94,0.15); }
+    .text-white { color: #ffffff; } .text-slate-950 { color: #020617; }
+    .text-slate-200 { color: #e2e8f0; } .text-slate-300 { color: #cbd5e1; } .text-slate-400 { color: #94a3b8; }
+    .text-indigo-300 { color: #a5b4fc; } .text-emerald-300 { color: #6ee7b7; } .text-amber-300 { color: #fcd34d; } .text-rose-300 { color: #fda4af; } .text-cyan-300 { color: #67e8f9; }
+    .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.875rem; } .text-lg { font-size: 1.125rem; } .text-xl { font-size: 1.25rem; } .text-2xl { font-size: 1.5rem; }
+    .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; } .font-extrabold { font-weight: 800; }
+    .text-center { text-align: center; } .text-left { text-align: left; }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .overflow-y-auto { overflow-y: auto; } .outline-none { outline: none; }
+    .fixed { position: fixed; } .inset-0 { inset: 0; } .z-50 { z-index: 50; }
+    .top-4 { top: 1rem; } .left-1\/2 { left: 50%; } .-translate-x-1\/2 { transform: translateX(-50%); }
+    .shadow-2xl { box-shadow: 0 20px 35px -10px rgba(0,0,0,0.65); }
+    .bg-black\/75 { background-color: rgba(0,0,0,0.75); }
+  </style>
+</head>
+<body class="h-full w-full bg-slate-950 text-slate-200">
+  <div id="toast-box" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 space-y-2 w-full max-w-md px-4"></div>
+
+  <!-- ADMIN LOGIN -->
+  <div id="admin-auth" class="h-full w-full flex items-center justify-center p-4 bg-slate-950">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-4">
+      <div class="text-center space-y-2">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-300 flex items-center justify-center">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h1 class="text-xl font-extrabold text-white">لوحة تحكم إدارة الرفيق</h1>
+        <p class="text-xs text-slate-400">إدارة حسابات الموظفين، الغرف، والتنبيهات العامة بدون قاعدة بيانات</p>
+      </div>
+      <form id="admin-login-form" class="space-y-3">
+        <div>
+          <label for="admin-pin" class="block text-xs font-bold text-slate-300 mb-1">رمز دخول المهندس (الافتراضي: 1234)</label>
+          <input id="admin-pin" type="password" inputmode="numeric" dir="ltr" value="1234" required
+            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-lg text-white outline-none" />
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl bg-indigo-600 text-white font-extrabold text-sm">دخول إلى لوحة التحكم</button>
+      </form>
+      <p class="pt-3 border-t border-slate-800 text-center text-xs text-slate-400 font-bold">
+        تم تصميم البرنامج بالكامل بإشراف المهندس محمد سليم القاق
+      </p>
+    </div>
+  </div>
+
+  <!-- ADMIN DASHBOARD -->
+  <div id="admin-app" class="h-full w-full hidden flex flex-col">
+    <header class="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between gap-2 shrink-0">
+      <div class="min-w-0">
+        <h2 class="text-sm font-extrabold text-white truncate">إدارة الرفيق — لوحة التحكم الخاصة</h2>
+        <p id="sync-badge" class="text-xs text-emerald-300 truncate">متصل بقاعدة بيانات الرفيق السحابية</p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+                <button type="button" id="btn-admin-logout" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold">خروج</button>
+      </div>
+    </header>
+
+    <!-- Nav Tabs -->
+    <nav class="p-2 bg-slate-900 border-b border-slate-800 grid grid-cols-4 gap-2 shrink-0">
+      <button type="button" data-tab="overview" class="ntab py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white">نظرة عامة</button>
+      <button type="button" data-tab="employees" class="ntab py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">الموظفون</button>
+      <button type="button" data-tab="rooms" class="ntab py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">الغرف والرسائل</button>
+      <button type="button" data-tab="server" class="ntab py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">النسخ والأمان</button>
+    </nav>
+
+    <main class="flex-1 overflow-y-auto p-4 max-w-5xl w-full mx-auto space-y-4">
+      <!-- TAB: OVERVIEW -->
+      <section id="tab-overview" class="space-y-4">
+        <div class="grid grid-cols-4 gap-3">
+          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+            <p class="text-xs text-slate-400">إجمالي الموظفين</p>
+            <p id="kpi-users" class="text-2xl font-extrabold text-indigo-300 mt-1">0</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+            <p class="text-xs text-slate-400">إجمالي الغرف</p>
+            <p id="kpi-rooms" class="text-2xl font-extrabold text-emerald-300 mt-1">0</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+            <p class="text-xs text-slate-400">إجمالي الرسائل</p>
+            <p id="kpi-msgs" class="text-2xl font-extrabold text-cyan-300 mt-1">0</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+            <p class="text-xs text-slate-400">التنبيهات النشطة</p>
+            <p id="kpi-alerts" class="text-2xl font-extrabold text-amber-300 mt-1">0</p>
+          </div>
+        </div>
+
+        <!-- Admin Broadcast -->
+        <div class="p-4 rounded-2xl bg-slate-900 border border-indigo-500/30 space-y-3">
+          <h3 class="text-sm font-extrabold text-indigo-300">إرسال تعميم إداري عاجل للغرف</h3>
+          <form id="broadcast-form" class="space-y-2">
+            <select id="broadcast-target" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none">
+              <option value="ALL">جميع الغرف المفتوحة</option>
+            </select>
+            <textarea id="broadcast-text" rows="2" placeholder="اكتب نص التعميم الإداري أو التنبيه العاجل..." required
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none"></textarea>
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold">إرسال التعميم الآن</button>
+          </form>
+        </div>
+
+        <p class="text-center text-xs text-slate-400 font-bold py-2">
+          تم تصميم البرنامج بالكامل بإشراف المهندس محمد سليم القاق
+        </p>
+      </section>
+
+      <!-- TAB: EMPLOYEES -->
+      <section id="tab-employees" class="hidden space-y-4">
+        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <h3 class="text-sm font-extrabold text-emerald-300">إضافة موظف جديد مباشرة</h3>
+          <form id="add-emp-form" class="grid grid-cols-2 gap-2">
+            <input id="new-emp-name" type="text" placeholder="اسم الموظف الكامل" required class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none" />
+            <input id="new-emp-email" type="email" dir="ltr" placeholder="name@gmail.com" required class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none text-left" />
+            <input id="new-emp-role" type="text" placeholder="القسم / الصفة" required class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none" />
+            <input id="new-emp-pass" type="password" dir="ltr" placeholder="كلمة المرور" required minlength="4" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none text-left" />
+            <button type="submit" class="py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold" style="grid-column: span 2;">إضافة الموظف وحفظه</button>
+          </form>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+          <h3 class="text-sm font-extrabold text-cyan-300">إضافة موظف عبر كود البطاقة (بدون إنترنت)</h3>
+          <div class="flex gap-2">
+            <input id="admin-card-input" type="text" dir="ltr" placeholder="ALRAFIQ:..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none text-left" />
+            <button type="button" id="btn-admin-import-card" class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold">إضافة</button>
+          </div>
+        </div>
+
+        <div id="admin-emp-list" class="space-y-2"></div>
+      </section>
+
+      <!-- TAB: ROOMS -->
+      <section id="tab-rooms" class="hidden space-y-4">
+        <div class="p-4 rounded-2xl bg-slate-900 border border-indigo-500/30 space-y-3">
+          <h3 class="text-sm font-extrabold text-indigo-300">إنشاء غرفة جديدة (من لوحة التحكم)</h3>
+          <form id="admin-new-room-form" class="grid grid-cols-2 gap-2">
+            <input id="adm-room-name" type="text" placeholder="اسم الغرفة" required class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none" />
+            <select id="adm-room-vis" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none">
+              <option value="public">🌐 عام (لكل الموظفين)</option>
+              <option value="private">🔒 خاص (للمضافين فقط)</option>
+            </select>
+            <input id="adm-room-desc" type="text" placeholder="وصف الغرفة" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none" />
+            <select id="adm-room-icon" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none">
+              <option value="💼">💼 إدارة</option>
+              <option value="📦">📦 مستودع</option>
+              <option value="🏭">🏭 إنتاج</option>
+              <option value="🧾">🧾 محاسبة</option>
+              <option value="🚚">🚚 شحن</option>
+              <option value="💬">💬 نقاش</option>
+            </select>
+            <button type="submit" class="py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold" style="grid-column: span 2;">إنشاء الغرفة</button>
+          </form>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <h3 class="text-sm font-extrabold text-indigo-300">تعيين موظف لغرفة مع إتاحة سجل الرسائل بالكامل</h3>
+          <div class="grid grid-cols-2 gap-2">
+            <select id="assign-emp-sel" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none"></select>
+            <select id="assign-room-sel" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none"></select>
+          </div>
+          <button type="button" id="btn-admin-assign" class="w-full py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold">إضافة للغرفة + إرسال السجل الكامل</button>
+        </div>
+        <div id="admin-rooms-list" class="space-y-2"></div>
+      </section>
+
+      <!-- TAB: SERVER & BACKUP -->
+      <section id="tab-server" class="hidden space-y-4">
+
+
+        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <h3 class="text-sm font-extrabold text-amber-300">تغيير رمز دخول المهندس</h3>
+          <div class="flex gap-2">
+            <input id="new-admin-pin" type="password" inputmode="numeric" dir="ltr" placeholder="رمز PIN الجديد" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none text-left" />
+            <button type="button" id="btn-save-admin-pin" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold">حفظ</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" id="btn-admin-export" class="py-3 rounded-xl bg-slate-800 text-cyan-300 text-xs font-bold">تصدير نسخة كاملة (JSON)</button>
+          <button type="button" id="btn-admin-import" class="py-3 rounded-xl bg-slate-800 text-emerald-300 text-xs font-bold">استيراد نسخة بيانات (JSON)</button>
+          <input id="admin-import-file" type="file" accept=".json" class="hidden" />
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+      const STORAGE_KEY = 'alrafiq_chat_v1';
+      const ADMIN_PIN_KEY = 'alrafiq_admin_pin_v1';
+      const DB_NAME = 'AlRafiqOfflineDB';
+      const DB_STORE = 'appState';
+
+      let state = {
+        users: [],
+        rooms: [
+          { id: 'room-general', name: 'الإدارة والمتابعة العامة', desc: 'قناة رئيسية بدون إنترنت • بوت التنبيهات مفعل', icon: '💼', botEnabled: true, visibility: 'public', pin: '', members: ['*'], createdAt: Date.now() },
+          { id: 'room-warehouse', name: 'المستودع والطلبيات', desc: 'تسجيل حركات المستودع والتنبيهات الفورية', icon: '📦', botEnabled: true, visibility: 'public', pin: '', members: ['*'], createdAt: Date.now() },
+          { id: 'room-accounting', name: 'المحاسبة والفواتير', desc: 'ملاحظات الحسابات اليومية والنسخ الاحتياطي', icon: '🧾', botEnabled: true, visibility: 'public', pin: '', members: ['*'], createdAt: Date.now() }
+        ],
+        messages: {
+          'room-general': [{ id: 'm-welcome-1', senderName: 'بوت الرفيق', senderEmail: 'bot@alrafiq.local', isBot: true, ackBy: [], text: 'أهلاً بك في دردشة الرفيق! تم تفعيل حسابك من لوحة تحكم المهندس.', timestamp: Date.now() }],
+          'room-warehouse': [],
+          'room-accounting': []
+        },
+        alerts: [],
+        settings: { soundEnabled: true, largeFont: false }
+      };
+
+      function showToast(msg, type = 'info') {
+        const box = document.getElementById('toast-box');
+        const bg = type === 'error' ? 'bg-rose-600' : type === 'success' ? 'bg-emerald-600' : 'bg-slate-800';
+        const el = document.createElement('div');
+        el.className = `px-4 py-2.5 rounded-xl text-xs font-bold text-white shadow-2xl ${bg}`;
+        el.textContent = msg;
+        box.appendChild(el);
+        setTimeout(() => el.remove(), 3200);
+      }
+
+      function copySafe(txt) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(txt).catch(() => fallbackCopy(txt));
+        } else fallbackCopy(txt);
+      }
+      function fallbackCopy(txt) {
+        const ta = document.createElement('textarea');
+        ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch (_) {}
+        ta.remove();
+      }
+      function buildActivationBundle(emp) {
+        const allowedRooms = (state.rooms || []).filter(r => {
+          const vis = r.visibility || 'public';
+          if (vis === 'public') return true;
+          return Array.isArray(r.members) && (r.members.includes('*') || r.members.includes(emp.email));
+        });
+        const msgsMap = {};
+        allowedRooms.forEach(r => { msgsMap[r.id] = state.messages[r.id] || []; });
+        return {
+          type: 'alrafiq_activation_bundle',
+          issuedAt: Date.now(),
+          user: emp,
+          allUsers: state.users.map(x => ({ name: x.name, email: x.email, role: x.role, passHash: x.passHash, suspended: !!x.suspended })),
+          rooms: allowedRooms,
+          messages: msgsMap
+        };
+      }
+      function escapeHtml(t) {
+        const d = document.createElement('div');
+        d.textContent = t || '';
+        return d.innerHTML;
+      }
+
+      function openIDB() {
+        return new Promise((resolve, reject) => {
+          try {
+            if (!window.indexedDB) return reject();
+            const req = indexedDB.open(DB_NAME, 1);
+            req.onupgradeneeded = () => { if (!req.result.objectStoreNames.contains(DB_STORE)) req.result.createObjectStore(DB_STORE); };
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject();
+          } catch (_) { reject(); }
+        });
+      }
+
+      async function loadState() {
+        try {
+          const db = await openIDB();
+          const d = await new Promise((res, rej) => {
+            const req = db.transaction(DB_STORE, 'readonly').objectStore(DB_STORE).get(STORAGE_KEY);
+            req.onsuccess = () => res(req.result);
+            req.onerror = () => rej();
+          });
+          if (d && Array.isArray(d.rooms)) { state = { ...state, ...d }; return; }
+        } catch (_) {}
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) { const p = JSON.parse(raw); if (p && Array.isArray(p.rooms)) state = { ...state, ...p }; }
+        } catch (_) {}
+      }
+
+      const FIREBASE_BASE = 'https://alrafiq-chat-default-rtdb.firebaseio.com/alrafiq_prod';
+      function fbKey(str) { return String(str).replace(/[.#$\[\]\/]/g, '_'); }
+
+      async function pushAdminToFirebase() {
+        const badge = document.getElementById('sync-badge');
+        try {
+          const usersMap = {};
+          (state.users || []).forEach(u => { usersMap[fbKey(u.email)] = u; });
+          const roomsMap = {};
+          (state.rooms || []).forEach(r => { roomsMap[fbKey(r.id)] = r; });
+          await fetch(`${FIREBASE_BASE}/users.json`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(usersMap) });
+          await fetch(`${FIREBASE_BASE}/rooms.json`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(roomsMap) });
+          for (const rid of Object.keys(state.messages || {})) {
+            const msgs = state.messages[rid] || [];
+            if (msgs.length) {
+              const mMap = {};
+              msgs.forEach(m => { mMap[fbKey(m.id)] = m; });
+              await fetch(`${FIREBASE_BASE}/messages/${fbKey(rid)}.json`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(mMap) });
+            }
+          }
+          if (badge) badge.textContent = 'متصل ومتزامن مع السحابة';
+        } catch (_) {
+          if (badge) badge.textContent = 'وضع محلي (بانتظار الاتصال)';
+        }
+      }
+
+      async function pullAdminFromFirebase() {
+        const badge = document.getElementById('sync-badge');
+        try {
+          const res = await fetch(`${FIREBASE_BASE}.json`);
+          if (!res.ok) throw new Error();
+          const remote = await res.json();
+          if (remote) {
+            if (remote.users) {
+              const rUsers = Object.values(remote.users).filter(Boolean);
+              if (rUsers.length) state.users = rUsers;
+            }
+            if (remote.rooms) {
+              const rRooms = Object.values(remote.rooms).filter(Boolean);
+              if (rRooms.length) state.rooms = rRooms;
+            }
+            if (remote.messages) {
+              Object.keys(remote.messages).forEach(rid => {
+                const arr = Object.values(remote.messages[rid] || {}).filter(Boolean);
+                arr.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                state.messages[rid] = arr;
+              });
+            }
+            await saveStateLocalOnly();
+            renderAll();
+          }
+          if (badge) badge.textContent = 'متصل ومتزامن مع السحابة';
+        } catch (_) {
+          if (badge) badge.textContent = 'وضع محلي (بانتظار الاتصال)';
+        }
+      }
+
+      async function saveStateLocalOnly() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+        try {
+          const db = await openIDB();
+          await new Promise((res, rej) => {
+            const tx = db.transaction(DB_STORE, 'readwrite');
+            tx.objectStore(DB_STORE).put(state, STORAGE_KEY);
+            tx.oncomplete = () => res();
+            tx.onerror = () => rej();
+          });
+        } catch (_) {}
+      }
+
+      async function saveState() {
+        await saveStateLocalOnly();
+        pushAdminToFirebase();
+      }
+      async function _unused_orig_saveState() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+        try {
+          const db = await openIDB();
+          await new Promise((res, rej) => {
+            const tx = db.transaction(DB_STORE, 'readwrite');
+            tx.objectStore(DB_STORE).put(state, STORAGE_KEY);
+            tx.oncomplete = () => res();
+            tx.onerror = () => rej();
+          });
+        } catch (_) {}
+      }
+
+      async function hashPassword(str) {
+        try {
+          if (window.crypto && crypto.subtle) {
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+          }
+        } catch (_) {}
+        return btoa(unescape(encodeURIComponent(str)));
+      }
+
+            function renderAll() {
+        const users = state.users || [];
+        const rooms = state.rooms || [];
+        const totalMsgs = Object.values(state.messages || {}).reduce((acc, arr) => acc + (Array.isArray(arr) ? arr.length : 0), 0);
+        const activeAlerts = (state.alerts || []).filter(a => !a.done).length;
+
+        document.getElementById('kpi-users').textContent = String(users.length);
+        document.getElementById('kpi-rooms').textContent = String(rooms.length);
+        document.getElementById('kpi-msgs').textContent = String(totalMsgs);
+        document.getElementById('kpi-alerts').textContent = String(activeAlerts);
+
+        // Broadcast target
+        const bTarget = document.getElementById('broadcast-target');
+        bTarget.innerHTML = '<option value="ALL">جميع الغرف المفتوحة</option>';
+        rooms.forEach(r => {
+          const opt = document.createElement('option');
+          opt.value = r.id; opt.textContent = `${r.icon || '💬'} ${r.name}`;
+          bTarget.appendChild(opt);
+        });
+
+        // Employees list
+        const empList = document.getElementById('admin-emp-list');
+        empList.innerHTML = '';
+        if (!users.length) {
+          empList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">لا يوجد موظفون مسجلون حتى الآن</p>';
+        } else {
+          users.forEach(u => {
+            const suspended = !!u.suspended;
+            const card = document.createElement('div');
+            card.className = 'p-3 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between gap-2';
+            card.className = 'p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2.5';
+            card.innerHTML = `
+              <div class="flex items-center justify-between gap-2">
+                <div class="min-w-0">
+                  <p class="text-xs font-extrabold text-white truncate">${escapeHtml(u.name)} <span class="text-indigo-300">(${escapeHtml(u.role)})</span></p>
+                  <p class="text-xs text-slate-400 truncate" dir="ltr">${escapeHtml(u.email)}</p>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button type="button" data-act="toggle" class="px-2.5 py-1 rounded-xl text-xs font-bold ${suspended ? 'bg-emerald-600 text-white' : 'bg-amber-500 text-slate-950'}">${suspended ? 'تفعيل' : 'إيقاف'}</button>
+                  <button type="button" data-act="del" class="px-2.5 py-1 rounded-xl bg-rose-600 text-white text-xs font-bold">حذف</button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800">
+                <button type="button" data-act="copy-act" class="py-1.5 px-2 rounded-xl bg-indigo-600 text-white text-xs font-bold">نسخ كود التفعيل الجاهز</button>
+                <button type="button" data-act="dl-act" class="py-1.5 px-2 rounded-xl bg-slate-800 text-cyan-300 text-xs font-bold">تنزيل ملف التفعيل</button>
+              </div>
+            `;
+            card.querySelector('[data-act="copy-act"]').addEventListener('click', () => {
+              const bundle = buildActivationBundle(u);
+              const code = 'ALRAFIQ-ACT:' + btoa(unescape(encodeURIComponent(JSON.stringify(bundle))));
+              copySafe(code);
+              showToast(`تم نسخ كود التفعيل الجاهز للموظف «${u.name}» (مع غرفه وسجل الرسائل)`, 'success');
+            });
+            card.querySelector('[data-act="dl-act"]').addEventListener('click', () => {
+              const bundle = buildActivationBundle(u);
+              const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url; a.download = `activate-${u.name}.json`; a.click();
+              URL.revokeObjectURL(url);
+              showToast(`تم تنزيل ملف التفعيل للموظف «${u.name}»`, 'success');
+            });
+            card.querySelector('[data-act="toggle"]').addEventListener('click', () => {
+              u.suspended = !u.suspended;
+              saveState(); renderAll();
+              showToast(u.suspended ? 'تم إيقاف حساب الموظف' : 'تم تفعيل حساب الموظف', 'info');
+            });
+            card.querySelector('[data-act="del"]').addEventListener('click', () => {
+              state.users = state.users.filter(x => x.email !== u.email);
+              saveState(); renderAll();
+              showToast('تم حذف الموظف', 'info');
+            });
+            empList.appendChild(card);
+          });
+        }
+
+        // Assign selects
+        const empSel = document.getElementById('assign-emp-sel');
+        const roomSel = document.getElementById('assign-room-sel');
+        empSel.innerHTML = users.length ? '' : '<option value="">لا يوجد موظفون</option>';
+        users.forEach(u => { const o = document.createElement('option'); o.value = u.email; o.textContent = `${u.name} (${u.role})`; empSel.appendChild(o); });
+        roomSel.innerHTML = rooms.length ? '' : '<option value="">لا توجد غرف</option>';
+        rooms.forEach(r => { const o = document.createElement('option'); o.value = r.id; o.textContent = `${r.icon || '💬'} ${r.name}`; roomSel.appendChild(o); });
+
+        // Rooms list
+        const rList = document.getElementById('admin-rooms-list');
+        rList.innerHTML = '';
+        rooms.forEach(r => {
+          const count = (state.messages[r.id] || []).length;
+          const card = document.createElement('div');
+          card.className = 'p-3 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between gap-2';
+          card.innerHTML = `
+            <div class="min-w-0">
+              <p class="text-xs font-extrabold text-white truncate">${escapeHtml(r.icon || '💬')} ${escapeHtml(r.name)}</p>
+              <p class="text-xs text-slate-400">الرسائل: ${count} • النوع: ${r.visibility === 'private' ? 'خاص' : 'عام'}</p>
+            </div>
+            <button type="button" data-act="delroom" class="px-2.5 py-1 rounded-xl bg-rose-600 text-white text-xs font-bold shrink-0">حذف</button>
+          `;
+          card.querySelector('[data-act="delroom"]').addEventListener('click', () => {
+            state.rooms = state.rooms.filter(x => x.id !== r.id);
+            delete state.messages[r.id];
+            saveState(); renderAll();
+            showToast('تم حذف الغرفة', 'info');
+          });
+          rList.appendChild(card);
+        });
+
+      }
+
+      function switchTab(name) {
+        ['overview', 'employees', 'rooms', 'server'].forEach(t => {
+          document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== name);
+        });
+        document.querySelectorAll('.ntab').forEach(b => {
+          const act = b.getAttribute('data-tab') === name;
+          b.className = act ? 'ntab py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white' : 'ntab py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300';
+        });
+      }
+
+      function bindEvents() {
+        document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const savedPin = localStorage.getItem(ADMIN_PIN_KEY) || '1234';
+          if (document.getElementById('admin-pin').value.trim() !== savedPin) {
+            showToast('رمز الدخول غير صحيح', 'error'); return;
+          }
+          await loadState();
+          await pullAdminFromFirebase();
+          document.getElementById('admin-auth').classList.add('hidden');
+          document.getElementById('admin-app').classList.remove('hidden');
+          renderAll();
+        });
+
+        document.getElementById('btn-admin-logout').addEventListener('click', () => {
+          document.getElementById('admin-app').classList.add('hidden');
+          document.getElementById('admin-auth').classList.remove('hidden');
+        });
+
+        document.querySelectorAll('.ntab').forEach(b => b.addEventListener('click', () => switchTab(b.getAttribute('data-tab'))));
+
+        document.getElementById('broadcast-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const target = document.getElementById('broadcast-target').value;
+          const text = document.getElementById('broadcast-text').value.trim();
+          if (!text) return;
+          const targets = target === 'ALL' ? state.rooms : state.rooms.filter(r => r.id === target);
+          targets.forEach(r => {
+            if (!state.messages[r.id]) state.messages[r.id] = [];
+            state.messages[r.id].push({
+              id: 'adm-' + Date.now() + '-' + Math.random().toString(36).slice(2, 5),
+              senderName: 'إدارة المهندس القاق', senderEmail: 'admin@alrafiq.local', isBot: true, ackBy: [],
+              text: `📢 تعميم إداري:\n${text}`, timestamp: Date.now()
+            });
+          });
+          await saveState();
+          document.getElementById('broadcast-text').value = '';
+          renderAll();
+          showToast('تم إرسال التعميم الإداري بنجاح', 'success');
+        });
+
+        document.getElementById('add-emp-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const name = document.getElementById('new-emp-name').value.trim();
+          const email = document.getElementById('new-emp-email').value.trim().toLowerCase();
+          const role = document.getElementById('new-emp-role').value.trim();
+          const pass = document.getElementById('new-emp-pass').value;
+          if (state.users.some(u => u.email === email || u.name.toLowerCase() === name.toLowerCase())) {
+            showToast('الاسم أو البريد مسجل مسبقاً', 'error'); return;
+          }
+          const passHash = await hashPassword(pass);
+          state.users.push({ name, email, role, passHash, createdAt: Date.now() });
+          await saveState();
+          e.target.reset();
+          renderAll();
+          showToast('تمت إضافة الموظف بنجاح', 'success');
+        });
+
+        document.getElementById('btn-admin-import-card').addEventListener('click', async () => {
+          try {
+            const raw = document.getElementById('admin-card-input').value.trim().replace(/^ALRAFIQ:/, '');
+            const obj = JSON.parse(decodeURIComponent(escape(atob(raw))));
+            if (!obj || !obj.n || !obj.e) throw new Error();
+            if (!state.users.some(u => u.email === obj.e)) {
+              state.users.push({ name: obj.n, email: obj.e, role: obj.r || 'موظف', passHash: obj.p || '', createdAt: Date.now() });
+              await saveState();
+              renderAll();
+              showToast(`تمت إضافة «${obj.n}»`, 'success');
+            } else showToast('الموظف موجود مسبقاً', 'info');
+            document.getElementById('admin-card-input').value = '';
+          } catch (_) { showToast('كود البطاقة غير صالح', 'error'); }
+        });
+
+        document.getElementById('admin-new-room-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const name = document.getElementById('adm-room-name').value.trim();
+          const visibility = document.getElementById('adm-room-vis').value;
+          const desc = document.getElementById('adm-room-desc').value.trim();
+          const icon = document.getElementById('adm-room-icon').value;
+          if (!name) return;
+          const id = 'room-' + Date.now();
+          state.rooms.unshift({
+            id, name, desc: desc || (visibility === 'private' ? 'غرفة خاصة بإدارة المهندس' : 'غرفة عامة'),
+            icon, botEnabled: true, visibility, pin: '',
+            members: visibility === 'public' ? ['*'] : [],
+            createdAt: Date.now()
+          });
+          state.messages[id] = [{
+            id: 'bot-' + Date.now(), senderName: 'إدارة الرفيق', senderEmail: 'admin@alrafiq.local', isBot: true, ackBy: [],
+            text: `تم إنشاء غرفة «${name}» من لوحة تحكم المهندس.`, timestamp: Date.now()
+          }];
+          await saveState();
+          e.target.reset();
+          renderAll();
+          showToast(`تم إنشاء غرفة «${name}»`, 'success');
+        });
+
+        document.getElementById('btn-admin-assign').addEventListener('click', async () => {
+          const email = document.getElementById('assign-emp-sel').value;
+          const rid = document.getElementById('assign-room-sel').value;
+          const emp = state.users.find(u => u.email === email);
+          const room = state.rooms.find(r => r.id === rid);
+          if (!emp || !room) { showToast('اختر الموظف والغرفة', 'error'); return; }
+          if (!Array.isArray(room.members)) room.members = ['*'];
+          if (!room.members.includes(email)) room.members.push(email);
+          if (!state.messages[rid]) state.messages[rid] = [];
+          state.messages[rid].push({
+            id: 'bot-' + Date.now(), senderName: 'إدارة الرفيق', senderEmail: 'admin@alrafiq.local', isBot: true, ackBy: [],
+            text: `👤 أضافت الإدارة «${emp.name}» (${emp.role}) إلى الغرفة مع سجل الرسائل بالكامل.`, timestamp: Date.now()
+          });
+          await saveState(); renderAll();
+          showToast('تمت الإضافة وإتاحة السجل الكامل', 'success');
+        });
+
+        document.getElementById('btn-save-admin-pin').addEventListener('click', () => {
+          const pin = document.getElementById('new-admin-pin').value.trim();
+          if (pin.length < 4) { showToast('الرمز يجب أن يكون 4 أرقام على الأقل', 'error'); return; }
+          localStorage.setItem(ADMIN_PIN_KEY, pin);
+          document.getElementById('new-admin-pin').value = '';
+          showToast('تم تغيير رمز دخول المهندس', 'success');
+        });
+
+        document.getElementById('btn-admin-export').addEventListener('click', () => {
+          const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = `alrafiq-admin-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click();
+          URL.revokeObjectURL(url);
+          showToast('تم تصدير النسخة بنجاح', 'success');
+        });
+
+        document.getElementById('btn-admin-import').addEventListener('click', () => document.getElementById('admin-import-file').click());
+        document.getElementById('admin-import-file').addEventListener('change', (e) => {
+          const f = e.target.files[0]; if (!f) return;
+          const r = new FileReader();
+          r.onload = async () => {
+            try {
+              const d = JSON.parse(r.result);
+              if (!d || !Array.isArray(d.rooms)) throw new Error();
+              state = { ...state, ...d };
+              await saveState(); renderAll();
+              showToast('تمت استعادة النسخة بنجاح', 'success');
+            } catch (_) { showToast('ملف غير صالح', 'error'); }
+          };
+          r.readAsText(f);
+        });
+      }
+
+      bindEvents();
+      setInterval(() => {
+        if (!document.getElementById('admin-app').classList.contains('hidden')) pullAdminFromFirebase();
+      }, 6000);
+    })();
+  </script>
+</body>
+</html>
